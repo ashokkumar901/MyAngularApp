@@ -1,14 +1,12 @@
-<link href='https://fonts.googleapis.com/css?family=Open+Sans:700,600' rel='stylesheet' type='text/css'>
-
-<form method="post" action="index.html">
+<form method="post" (ngSubmit)="signIn()">
   <div class="box">
     <h1>Dashboard</h1>
 
-    <input type="email" name="email" value="email" class="email" />
+    <input type="email" name="email" [(ngModel)]="user.email" class="email" />
 
-    <input type="password" name="email" value="email" class="email" />
+    <input type="password" name="email" [(ngModel)]="user.password" class="email" />
 
-    <a href="#"><div class="btn">Sign In</div></a> <!-- End Btn -->
+    <div class="btn" style="cursor:pointer" type="submit" (click)="signIn()">Sign In</div> <!-- End Btn -->
 
     <div id="btn2" style="cursor:pointer" routerLink="/signup">Sign Up</div> <!-- End Btn2 -->
 
