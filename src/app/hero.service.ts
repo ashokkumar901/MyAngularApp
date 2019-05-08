@@ -13,7 +13,7 @@ export class HeroService {
   private log(message: string) {
     this.messageService.add(`HeroService:${message}`);
   }
-  private heroesUrl = 'api/heroes';
+  private heroesUrl = 'http://localhost:3000/api/heroes';
   getHeroNo404<Data>(id: number): Observable<Hero> {
     const url = `${this.heroesUrl}/?id=${id}`;
     return this.http.get<Hero[]>(url)
@@ -33,8 +33,9 @@ export class HeroService {
         catchError(this.handleError<Hero[]>('getheroes', []))
       )
   }
-  getHero(id: number): Observable<Hero> {
+  getHero(id: string): Observable<Hero> {
     const url = `${this.heroesUrl}/${id}`;
+    console.log('url', url)
     return this.http.get<Hero>(url).pipe(
       tap(_ => this.log(`fetched hero id=${id}`)),
       catchError(this.handleError<Hero>(`getHero id=${id}`))
@@ -70,17 +71,17 @@ export class HeroService {
       catchError(this.handleError<Hero>('deleteHero'))
     );
   }
- /* GET heroes whose name contains search term */
-searchHeroes(term: string): Observable<Hero[]> {
-  if (!term.trim()) {
-    // if not search term, return empty hero array.
-    return of([]);
+  /* GET heroes whose name contains search term */
+  searchHeroes(term: string): Observable<Hero[]> {
+    if (!term.trim()) {
+      // if not search term, return empty hero array.
+      return of([]);
+    }
+    return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
+      tap(_ => this.log(`found heroes matching "${term}"`)),
+      catchError(this.handleError<Hero[]>('searchHeroes', []))
+    );
   }
-  return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
-    tap(_ => this.log(`found heroes matching "${term}"`)),
-    catchError(this.handleError<Hero[]>('searchHeroes', []))
-  );
-}
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
