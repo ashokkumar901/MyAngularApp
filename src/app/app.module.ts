@@ -10,7 +10,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
 import { HeroSearchComponent } from './hero-search/hero-search.component';
 import { LoginComponent } from './login/login.component';
-import { HeaderComponent } from './header/header.component';
 import { SignupComponent } from './signup/signup.component';
 import { LogoutComponent } from './logout/logout.component';
 @NgModule({
@@ -22,7 +21,6 @@ import { LogoutComponent } from './logout/logout.component';
     DashboardComponent,
     HeroSearchComponent,
     LoginComponent,
-    HeaderComponent,
     SignupComponent,
     LogoutComponent
   ],

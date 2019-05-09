@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
+import { LooseObject } from '../interfaces/looseobject/looseobject';
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.sass']
 })
 export class SignupComponent implements OnInit {
-  user: Object = {
+  user: LooseObject = {
     name: '',
     email: '',
     password: ''
