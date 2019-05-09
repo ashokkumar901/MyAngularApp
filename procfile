@@ -1,2 +1,2 @@
 web: cd /home/sys3029/Desktop/MyAngularApp/BACKENDANGULAR npm start
-web: ng serve
+web: npm start
