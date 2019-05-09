@@ -13,16 +13,11 @@ export class LoginComponent implements OnInit {
   };
 
   constructor(private authService: AuthService) {
-
-    this.authService.observeUserId.subscribe(id => {
-      if (id) { this.authService.signIn({}); }
-    });
   }
 
   ngOnInit() {
   }
   signIn(): void {
-    console.log('user', this.user);
     this.authService.signIn(this.user);
   }
 

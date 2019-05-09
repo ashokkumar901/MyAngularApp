@@ -17,7 +17,33 @@ export class AuthService {
   observeUserId = this.userIdSource.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {
+    this.authToken = localStorage.getItem('token') || undefined;
+    this.authTokenSource.next(this.authToken);
+    this.userId = parseInt(localStorage.getItem('userId'), 10) || undefined;
+    this.userIdSource.next(this.userId);
+    this.vertifyToken();
 
+  }
+  vertifyToken(cb?: Function): void {
+    if (this.userId && this.authToken) {
+      const url = `${this.rootUrl}/${this.userId}?access_token=${this.authToken}`;
+      this.http.get(url).subscribe(res => {
+        const response: LooseObject = res;
+        if (cb) { cb(null, response); }
+
+      }, err => {
+        if (err.status) {
+          this.authToken = undefined;
+          this.userId = undefined;
+          this.authTokenSource.next(this.authToken);
+          this.userIdSource.next(this.userId);
+          localStorage.removeItem('userId');
+          localStorage.removeItem('token');
+          this.router.navigate(['login'])
+        }
+        if (cb) { cb(err, null); }
+      });
+    } else { if (cb) { cb(null, false) } }
   }
   signUp(user: LooseObject, cb?: Function): void {
 
@@ -25,7 +51,6 @@ export class AuthService {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     };
-    console.log("requesturl", url)
     const authUser = {
       name: user.name.trim(),
       email: user.email.trim(),
@@ -48,32 +73,56 @@ export class AuthService {
 
   signIn(user: LooseObject, cb?: Function): void {
     const url = `http://localhost:3000/api/Authusers/login`;
-    const authUser = {
-      email: user.email.trim(),
-      password: user.password.trim()
-    };
-    this.http.post(url, authUser).subscribe(res => {
-      const response: LooseObject = res;
-      if (response.id) {
-        this.authToken = response.id;
-        this.authTokenSource.next(this.authToken);
+    if (user) {
+      const authUser = {
+        email: user.email.trim(),
+        password: user.password.trim()
+      };
+      this.http.post(url, authUser).subscribe(res => {
+        const response: LooseObject = res;
+        if (response.id) {
+          this.authToken = response.id;
+          this.authTokenSource.next(this.authToken);
 
-        this.userId = response.userId;
-        this.userIdSource.next(this.userId);
+          this.userId = response.userId;
+          this.userIdSource.next(this.userId);
 
-        localStorage.setItem('token', this.authToken);
-        localStorage.setItem('userId', this.userId + '');
-        this.router.navigate(['dashboard']);
-        alert('login succeeeded');
-      } else {
-      }
-      if (cb) { cb(null, response); }
+          localStorage.setItem('token', this.authToken);
+          localStorage.setItem('userId', this.userId + '');
+          this.router.navigate(['dashboard']);
+          alert('login succeeeded');
+        } else {
+        }
+        if (cb) { cb(null, response); }
+      }, err => {
+        if (cb) {
+          cb(err, null);
+          console.log('in errrorrrr')
+        }
+      });
+    }
+  }
+
+  logout(cb?: Function): void {
+    const url = `${this.rootUrl}/logout?access_token=${this.authToken}`;
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+
+    this.authToken = undefined;
+    this.authTokenSource.next(this.authToken);
+
+    this.userId = undefined;
+    this.userIdSource.next(this.userId);
+    this.http.post(url, {}).subscribe(res => {
+      this.router.navigate(['login']);
     }, err => {
       if (cb) {
         cb(err, null);
-        console.log('in errrorrrr')
+        this.router.navigate(['login'])
       }
-    });
+    })
+
   }
+
 }
 
