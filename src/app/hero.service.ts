@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { MessageService } from './message.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
+import { environment } from '../environments/environment.prod'
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +14,7 @@ export class HeroService {
   private log(message: string) {
     this.messageService.add(`HeroService:${message}`);
   }
-  private heroesUrl = 'http://localhost:3000/api/heroes';
+  private heroesUrl = `${environment.APIEndpoint}/heroes`;
   getHeroNo404<Data>(id: number): Observable<Hero> {
     const url = `${this.heroesUrl}/?id=${id}`;
     return this.http.get<Hero[]>(url)

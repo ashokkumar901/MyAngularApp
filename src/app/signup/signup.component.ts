@@ -19,7 +19,7 @@ export class SignupComponent implements OnInit {
   }
   signUp(): void {
     this.authService.signUp(this.user, (err, response) => {
-      console.log(err, response);
+      console.log(err, response)
     });
   }
 

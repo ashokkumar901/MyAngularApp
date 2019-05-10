@@ -3,11 +3,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { LooseObject } from './interfaces/looseobject/looseobject';
+import { environment } from '../environments/environment.prod';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private rootUrl = `https://172.16.21.4:3000/api/Authusers`;
+  private rootUrl = `${environment.APIEndpoint}/Authusers`;
   private authToken: string;
   private authTokenSource = new BehaviorSubject<string>(undefined);
   observeAuthToken = this.authTokenSource.asObservable();
@@ -57,10 +58,8 @@ export class AuthService {
       password: user.password.trim()
     };
 
-    console.log("authUser", authUser)
     this.http.post(url, authUser).subscribe(res => {
       const response: LooseObject = res;
-      console.log('Please respond', response);
       if (cb) { cb(null, res); alert('signup succeeded'); this.router.navigate(['login']) }
     }, err => {
       if (cb) {
