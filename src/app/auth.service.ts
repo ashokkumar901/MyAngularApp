@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { LooseObject } from './interfaces/looseobject/looseobject';
-import { environment } from '../environments/environment.prod';
+import { environment } from '../environments/environment';
 @Injectable({
   providedIn: 'root'
 })

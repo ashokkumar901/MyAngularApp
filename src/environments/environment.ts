@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  APIEndpoint: 'https://localhost:3000/api/Authusers'
+  APIEndpoint: 'http://localhost:3000/api'
 };
 
 /*
