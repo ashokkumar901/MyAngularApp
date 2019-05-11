@@ -8,7 +8,7 @@ import { environment } from '../environments/environment.prod';
   providedIn: 'root'
 })
 export class AuthService {
-  private rootUrl = `${environment.APIEndpoint}/Authusers`;
+  private rootUrl = `${environment.APIEndpoint}/Users`;
   private authToken: string;
   private authTokenSource = new BehaviorSubject<string>(undefined);
   observeAuthToken = this.authTokenSource.asObservable();
@@ -71,7 +71,7 @@ export class AuthService {
   }
 
   signIn(user: LooseObject, cb?: Function): void {
-    const url = `${environment.APIEndpoint}/Authusers/login`;
+    const url = `${environment.APIEndpoint}/Users/login`;
     if (user) {
       const authUser = {
         email: user.email.trim(),
